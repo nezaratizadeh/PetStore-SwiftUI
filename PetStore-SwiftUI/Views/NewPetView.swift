@@ -21,7 +21,7 @@ struct NewPetView: View {
                 
                     .toolbar{
                         ToolbarItem(placement: .status){
-                            Button("Add to Library"){
+                            Button("Add to PetStore"){
                                 pet.status = statusValue
                                 pets.addNewPet(pet: pet)
                                 dismiss()
