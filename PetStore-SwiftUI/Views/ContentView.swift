@@ -13,18 +13,28 @@ struct ContentView: View {
     @State var statusValue:String = ""
     @State var pet : Pet = Pet()
     
+    
     var body: some View {
-        VStack {
-            StatusDropDownView(statusValue: $statusValue)
+//        VStack {
+//            StatusDropDownView(statusValue: $statusValue)
             
             NavigationView {
                 List {
-                    
+                    StatusDropDownView(statusValue: $statusValue)
+
                     ForEach(pets.petCashes) { pet in
+                        NavigationLink(destination: DetailView(pet: pet,pets: _pets, statusValue: $statusValue)) {
                         Text(pet.name ?? "no name")
+                        }
                     }
                     .onDelete(perform: delete)
                     .onMove(perform: move)
+                    
+                }
+                .refreshable {
+                    print("refresh table")
+                    print(statusValue)
+                    APIService.loadData(status: statusValue, pets: pets)
                 }
                 .listStyle(.inset)
                 .navigationTitle("Pets")
@@ -41,7 +51,7 @@ struct ContentView: View {
                     NewPetView(statusValue:$statusValue, pet: $pet)
                 }
                                     , trailing:EditButton())
-            }
+//            }
             
             
             //            List(pets,id:\.id) { pet in
@@ -129,56 +139,7 @@ struct StatusDropDownView: View {
                 Button(status) {
                     self.statusValue = status
                     
-                    let url = "https://petstore.swagger.io/v2/pet/"
-                    let configuration = URLSessionConfiguration.default
-                    
-                    guard let url = URL(string: "\(url)findByStatus?status=\(status)") else {
-                        print("Error: cannot create URL")
-                        return
-                    }
-                    // Create the url request
-                    
-                    let session = URLSession(configuration: configuration)
-                    
-                    var request = URLRequest(url: url)
-                    request.httpMethod = "GET"
-                    session.dataTask(with: request) { data, response, error in
-                        guard error == nil else {
-                            print("Error: error calling GET")
-                            print(error!)
-                            return
-                        }
-                        guard let data = data else {
-                            print("Error: Did not receive data")
-                            return
-                        }
-                        guard let response = response as? HTTPURLResponse, (200 ..< 299) ~= response.statusCode else {
-                            print("Error: HTTP request failed")
-                            return
-                        }
-                        do {
-                            guard let jsonObject = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
-                                print("Error: Cannot convert data to JSON object")
-                                return
-                            }
-                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                                print("Error: Cannot convert JSON object to Pretty JSON data")
-                                return
-                            }
-                            
-                            let decodedData = try JSONDecoder().decode([Pet].self,
-                                                                       from: prettyJsonData)
-                            DispatchQueue.main.async {
-                                pets.petCashes = decodedData
-                                //                self.tableView.reloadData()
-                                print(pets.petCashes.count)
-                            }
-                        } catch {
-                            print("Error: Trying to convert JSON data to string")
-                            return
-                        }
-                    }.resume()
-                    
+                    APIService.loadData(status:statusValue, pets:pets)
                 }
             }
         } label: {
