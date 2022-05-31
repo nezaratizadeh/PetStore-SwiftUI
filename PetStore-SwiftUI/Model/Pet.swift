@@ -13,9 +13,9 @@ class Pet: Codable , ObservableObject {
     var id: UInt64
     var name: String?
     var status: String?
-    var tags: [Tag]
+    var tags: [Tag]?
     var category: Category?
-    var photoUrls: [String]
+    var photoUrls: [String]?
     
     init(id: UInt64 = 0 , name: String = "", status:String = "sold", tags:[Tag] = [], photoUrls:[String] = []) {
         self.id = id
