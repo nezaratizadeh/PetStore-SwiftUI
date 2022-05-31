@@ -1,87 +1,67 @@
+
+   
 //
 //  ContentView.swift
 //  PetStoreSwiftUI
 //
 //  Created by Leila Nezaratizadeh on 11/04/2022.
 //
-
 import SwiftUI
 
-struct ContentView: View {
+struct ContentView1: View {
     @EnvironmentObject var pets: Pets
     @State var ShowingAddPetpage : Bool = false
     @State var statusValue:String = ""
     @State var pet : Pet = Pet()
-    private var statusList = ["available", "pending", "sold"]
-    @State private var selectedIndex = 0
+    
     
     var body: some View {
 //        VStack {
 //            StatusDropDownView(statusValue: $statusValue)
             
             NavigationView {
-                VStack {
+                List {
+                    StatusDropDownView(statusValue: $statusValue)
 
-                    Picker(selection: $selectedIndex, label: Text("Select Status")) {
-                                    ForEach(0 ..< statusList.count) {
-                                        Text(self.statusList[$0])
-                                    }
-                                }
-                    .padding()
-                    .pickerStyle(SegmentedPickerStyle())
-                        .onChange(of: selectedIndex) {
-                            tag in
-
-                            APIService.loadData(status: statusList[tag], pets: pets)
+                    ForEach(pets.petCashes) { pet in
+                        NavigationLink(destination: DetailView(pet: pet,pets: _pets, statusValue: $statusValue)) {
+                        Text(pet.name ?? "no name")
                         }
-                        .onAppear(){
-                            APIService.loadData(status: statusList[selectedIndex], pets: pets)
-                        }
-                                       List {
-    //                    StatusDropDownView(statusValue: $statusValue)
-                        
-                        
-                        ForEach(pets.petCashes) { pet in
-                            NavigationLink(destination: DetailView(pet: pet,pets: _pets, statusValue: $statusValue)) {
-                            Text(pet.name ?? "no name")
-                            }
-                        }
-                        .onDelete(perform: delete)
-                        .onMove(perform: move)
-                        
                     }
-                    .refreshable {
-                        print("refresh table")
-                        print(statusValue)
-                        APIService.loadData(status: statusValue, pets: pets)
-                    }
-                    .listStyle(.inset)
-                    .navigationTitle("Pets")
-                    .navigationBarItems(leading: Button(action: {
-                        ShowingAddPetpage = true
-                        
-                    }, label: {
-                        Image(systemName: "plus")
-                    })
-                                            .sheet(isPresented: $ShowingAddPetpage, onDismiss: {
-                        
-                    }) {
-                        NewPetView(statusValue:$statusValue, pet: $pet)
-                    }
-                                        , trailing:EditButton())
-    //            }
-                
-                
-                //            List(pets,id:\.id) { pet in
-                //                Text(pet.name ?? "no name")
-                //            }
-            }
+                    .onDelete(perform: delete)
+                    .onMove(perform: move)
+                    
+                }
+                .refreshable {
+                    print("refresh table")
+                    print(statusValue)
+                    APIService.loadData(status: statusValue, pets: pets)
+                }
+                .listStyle(.inset)
+                .navigationTitle("Pets")
+                .navigationBarItems(leading: Button(action: {
+                    ShowingAddPetpage = true
+                    
+                }, label: {
+                    Image(systemName: "plus")
+                })
+                                        .disabled(statusValue == "")
+                                        .sheet(isPresented: $ShowingAddPetpage, onDismiss: {
+                    
+                }) {
+                    NewPetView(statusValue:$statusValue, pet: $pet)
+                }
+                                    , trailing:EditButton())
+//            }
+            
+            
+            //            List(pets,id:\.id) { pet in
+            //                Text(pet.name ?? "no name")
+            //            }
         }
     }
     
-    func loadDatas(){
-        
-    }
+    
     
     func move(from source: IndexSet, to destination: Int) {
         pets.petCashes.move(fromOffsets: source, toOffset: destination)
@@ -141,14 +121,14 @@ struct ContentView: View {
 }
 
 
-struct ContentView_Previews: PreviewProvider {
+struct ContentView_Previews1: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView1()
             .environmentObject(Pets())
     }
 }
 
-struct StatusDropDownView: View {
+struct StatusDropDownView1: View {
     var statusDropDownList = ["sold", "available", "pending"]
     var placeholder = "Status"
     @Binding var statusValue : String
