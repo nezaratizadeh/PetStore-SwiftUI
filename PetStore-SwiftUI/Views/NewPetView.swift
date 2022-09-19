@@ -17,6 +17,8 @@ struct NewPetView: View {
         NavigationView {
             VStack {
                 TextField("PetName",text: $pet.name.toUnwrapped(defaultValue: "No name"))
+                    .disableAutocorrection(true)
+                    .textFieldStyle(.roundedBorder)
                     .navigationBarTitle("Got a new Pet")
                 
                     .toolbar{

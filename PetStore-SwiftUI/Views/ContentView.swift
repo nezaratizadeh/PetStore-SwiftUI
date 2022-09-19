@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var pets: Pets
     @State var ShowingAddPetpage : Bool = false
-    @State var statusValue:String = ""
+    @State var statusValue:String = "available"
     @State var pet : Pet = Pet()
     private var statusList = ["available", "pending", "sold"]
     @State private var selectedIndex = 0
@@ -31,7 +31,7 @@ struct ContentView: View {
                     .pickerStyle(SegmentedPickerStyle())
                         .onChange(of: selectedIndex) {
                             tag in
-
+                            statusValue = statusList[selectedIndex]
                             APIService.loadData(status: statusList[tag], pets: pets)
                         }
                         .onAppear(){
