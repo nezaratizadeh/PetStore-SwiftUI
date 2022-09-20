@@ -13,6 +13,8 @@ class Pets : ObservableObject{
         return petCashes
     }
     
+    
+    
     /// add new Book
      func addNewPet (pet: Pet ) {
          petCashes.insert(pet, at: 0)

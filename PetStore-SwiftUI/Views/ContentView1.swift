@@ -13,7 +13,15 @@ struct ContentView1: View {
     @State var ShowingAddPetpage : Bool = false
     @State var statusValue:String = ""
     @State var pet : Pet = Pet()
-    
+    @State private var searchText = ""
+    var filteredPets: [Pet] {
+        if searchText.isEmpty {
+            return pets.petCashes
+        } else {
+            return pets.petCashes.filter {
+                $0.name?.lowercased() == searchText.lowercased()}
+        }
+    }
     
     var body: some View {
 //        VStack {
@@ -23,7 +31,7 @@ struct ContentView1: View {
                 List {
                     StatusDropDownView(statusValue: $statusValue)
 
-                    ForEach(pets.petCashes) { pet in
+                    ForEach(filteredPets) { pet in
                         NavigationLink(destination: DetailView(pet: pet,pets: _pets, statusValue: $statusValue)) {
                         Text(pet.name ?? "no name")
                         }
@@ -32,6 +40,7 @@ struct ContentView1: View {
                     .onMove(perform: move)
                     
                 }
+                .searchable(text: $searchText)
                 .refreshable {
                     print("refresh table")
                     print(statusValue)

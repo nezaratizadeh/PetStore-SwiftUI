@@ -14,62 +14,95 @@ struct ContentView: View {
     @State var pet : Pet = Pet()
     private var statusList = ["available", "pending", "sold"]
     @State private var selectedIndex = 0
+    @State private var searchText = ""
+    
+    var filteredPets : [Pet] {
+        if searchText.isEmpty {
+            return pets.petCashes
+        }else {
+            return pets.petCashes.filter {a in
+                if let name = a.name {
+                    return name.lowercased().starts(with:searchText.lowercased())
+                }else {
+                    return false
+                }
+            }
+                
+        }
+    }
+    
+    
+    
+    
+    
+//    var filteredPets: [Pet] {
+//        if searchText.isEmpty {
+//            return pets.petCashes
+//        } else {
+//            return pets.petCashes.filter {
+//                $0.name?.lowercased() == searchText.lowercased()}
+//        }
+//    }
     
     var body: some View {
-//        VStack {
-//            StatusDropDownView(statusValue: $statusValue)
-            
-            NavigationView {
-                VStack {
-
-                    Picker(selection: $selectedIndex, label: Text("Select Status")) {
-                                    ForEach(0 ..< statusList.count) {
-                                        Text(self.statusList[$0])
-                                    }
-                                }
-                    .padding()
-                    .pickerStyle(SegmentedPickerStyle())
-                        .onChange(of: selectedIndex) {
-                            tag in
-                            statusValue = statusList[selectedIndex]
-                            APIService.loadData(status: statusList[tag], pets: pets)
-                        }
-                        .onAppear(){
-                            APIService.loadData(status: statusList[selectedIndex], pets: pets)
-                        }
-                                       List {
-    //                    StatusDropDownView(statusValue: $statusValue)
-                        
-                        
-                        ForEach(pets.petCashes) { pet in
-                            NavigationLink(destination: DetailView(pet: pet,pets: _pets, statusValue: $statusValue)) {
+        //        VStack {
+        //            StatusDropDownView(statusValue: $statusValue)
+        
+        NavigationView {
+            VStack {
+                
+                Picker(selection: $selectedIndex, label: Text("Select Status")) {
+                    ForEach(0 ..< statusList.count) {
+                        Text(self.statusList[$0])
+                    }
+                }
+                .padding()
+                .pickerStyle(SegmentedPickerStyle())
+                .onChange(of: selectedIndex) {
+                    tag in
+                    statusValue = statusList[selectedIndex]
+                    APIService.loadData(status: statusList[tag], pets: pets)
+                }
+                .onAppear(){
+                    APIService.loadData(status: statusList[selectedIndex], pets: pets)
+                }
+                
+                
+                List {
+                    //                    StatusDropDownView(statusValue: $statusValue)
+                    
+                    
+                    ForEach(filteredPets) { pet in
+                        NavigationLink(destination: DetailView(pet: pet,pets: _pets, statusValue: $statusValue)) {
                             Text(pet.name ?? "no name")
-                            }
                         }
-                        .onDelete(perform: delete)
-                        .onMove(perform: move)
-                        
                     }
-                    .refreshable {
-                        print("refresh table")
-                        print(statusValue)
-                        APIService.loadData(status: statusValue, pets: pets)
-                    }
-                    .listStyle(.inset)
-                    .navigationTitle("Pets")
-                    .navigationBarItems(leading: Button(action: {
-                        ShowingAddPetpage = true
-                        
-                    }, label: {
-                        Image(systemName: "plus")
-                    })
-                                            .sheet(isPresented: $ShowingAddPetpage, onDismiss: {
-                        
-                    }) {
-                        NewPetView(statusValue:$statusValue, pet: $pet)
-                    }
-                                        , trailing:EditButton())
-    //            }
+                    .onDelete(perform: delete)
+                    .onMove(perform: move)
+                    
+                }
+                .searchable(text: $searchText)
+                
+//                .refreshable {
+//                    print("refresh table")
+//                    print(statusValue)
+//                    APIService.loadData(status: statusValue, pets: pets)
+//                }
+                .listStyle(.inset)
+                .navigationTitle("Pets")
+                .navigationBarItems(leading: Button(action: {
+                    ShowingAddPetpage = true
+                    
+                }, label: {
+                    Image(systemName: "plus")
+                })
+                                        .sheet(isPresented: $ShowingAddPetpage, onDismiss: {
+                    
+                }) {
+                    NewPetView(statusValue:$statusValue, pet: $pet)
+                }
+                                    , trailing:EditButton())
+                //            }
                 
                 
                 //            List(pets,id:\.id) { pet in
@@ -79,9 +112,6 @@ struct ContentView: View {
         }
     }
     
-    func loadDatas(){
-        
-    }
     
     func move(from source: IndexSet, to destination: Int) {
         pets.petCashes.move(fromOffsets: source, toOffset: destination)
