@@ -31,19 +31,6 @@ struct ContentView: View {
         }
     }
     
-    
-    
-    
-    
-//    var filteredPets: [Pet] {
-//        if searchText.isEmpty {
-//            return pets.petCashes
-//        } else {
-//            return pets.petCashes.filter {
-//                $0.name?.lowercased() == searchText.lowercased()}
-//        }
-//    }
-    
     var body: some View {
         //        VStack {
         //            StatusDropDownView(statusValue: $statusValue)
