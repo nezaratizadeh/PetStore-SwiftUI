@@ -14,12 +14,18 @@ struct ContentView1: View {
     @State var statusValue:String = ""
     @State var pet : Pet = Pet()
     @State private var searchText = ""
-    var filteredPets: [Pet] {
+    var filteredPets : [Pet] {
         if searchText.isEmpty {
             return pets.petCashes
-        } else {
-            return pets.petCashes.filter {
-                $0.name?.lowercased() == searchText.lowercased()}
+        }else {
+            return pets.petCashes.filter {a in
+                if let name = a.name {
+                    return name.lowercased().starts(with:searchText.lowercased())
+                }else {
+                    return false
+                }
+            }
+                
         }
     }
     
