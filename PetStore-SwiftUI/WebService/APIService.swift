@@ -7,7 +7,7 @@
 
 import Foundation
 
-class APIService {
+final class APIService {
     
     static func loadData(status: String,pets: Pets) {
         let url = "https://petstore.swagger.io/v2/pet/"
