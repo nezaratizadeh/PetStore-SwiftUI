@@ -48,6 +48,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E2C40A528DB345D00159FAB /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2EDB79DE283384EA0021944B /* Pets.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		2EC4803D280464550039876F = {
 			isa = PBXGroup;
 			children = (
@@ -91,7 +99,6 @@
 				2EC480682806CA990039876F /* Pet.swift */,
 				2EC4806B2806CAB10039876F /* Tag.swift */,
 				2EC4806D2806CABC0039876F /* Category.swift */,
-				2EDB79DE283384EA0021944B /* Pets.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -99,6 +106,7 @@
 		2EDB79D82832955C0021944B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2E2C40A528DB345D00159FAB /* ViewModel */,
 				2EC4804B280464550039876F /* ContentView.swift */,
 				2EDB79DA283295860021944B /* NewPetView.swift */,
 				2EDB7A482844B1E30021944B /* DetailView.swift */,
