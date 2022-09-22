@@ -10,7 +10,7 @@ import SwiftUI
 struct DetailView: View {
     @ObservedObject var pet : Pet
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var pets: Pets
+    @EnvironmentObject var pets: PetsViewModel
     @Binding var statusValue:String
 
 

@@ -12,7 +12,7 @@ struct PetStoreSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(Pets())
+                .environmentObject(PetsViewModel())
         }
     }
 }

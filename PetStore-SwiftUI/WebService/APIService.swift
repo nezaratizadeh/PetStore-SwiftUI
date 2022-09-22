@@ -15,21 +15,18 @@ final class APIService {
         
     }
     
-     func loadData(status: String,pets: Pets) {
+     func loadData(status: String,pets: PetsViewModel) {
         let url = "https://petstore.swagger.io/v2/pet/"
-        let configuration = URLSessionConfiguration.default
         
         guard let url = URL(string: "\(url)findByStatus?status=\(status)") else {
             print("Error: cannot create URL")
             return
         }
+         
         // Create the url request
-        
-        let session = URLSession(configuration: configuration)
-        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        session.dataTask(with: request) { data, response, error in
+         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
                 print("Error: error calling GET")
                 print(error!)
@@ -70,6 +67,7 @@ final class APIService {
 
     
      func editPetData(pet:Pet) {
+
         // Convert model to JSON data
         guard let jsonData = try? JSONEncoder().encode(pet) else {
             print("Error: Trying to convert model to JSON data")
@@ -119,7 +117,8 @@ final class APIService {
         
     }
     
-    func addPet(pet: Pet) {
+    
+    func addPet(pet:Pet) {
         // Convert model to JSON data
         guard let jsonData = try? JSONEncoder().encode(pet) else {
             print("Error: Trying to convert model to JSON data")
@@ -165,8 +164,9 @@ final class APIService {
                 return
             }
         }.resume()
-
     }
+
+    
     
     
 }
