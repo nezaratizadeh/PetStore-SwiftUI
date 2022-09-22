@@ -18,8 +18,8 @@ struct DetailView: View {
         VStack {
             TextField("name", text: $pet.name.toUnwrapped(defaultValue: "no name"))
             Button("OK") {
-                APIService.editPetData(pet: pet)
-                APIService.loadData(status: statusValue , pets: pets)
+                APIService.apiService.editPetData(pet: pet)
+                APIService.apiService.loadData(status: statusValue , pets: pets)
                 dismiss()
             }
         }

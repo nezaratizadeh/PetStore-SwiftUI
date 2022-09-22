@@ -48,10 +48,10 @@ struct ContentView: View {
                 .onChange(of: selectedIndex) {
                     tag in
                     statusValue = statusList[selectedIndex]
-                    APIService.loadData(status: statusList[tag], pets: pets)
+                    APIService.apiService.loadData(status: statusList[tag], pets: pets)
                 }
                 .onAppear(){
-                    APIService.loadData(status: statusList[selectedIndex], pets: pets)
+                    APIService.apiService.loadData(status: statusList[selectedIndex], pets: pets)
                 }
                 
                 
@@ -177,7 +177,7 @@ struct StatusDropDownView: View {
                 Button(status) {
                     self.statusValue = status
                     
-                    APIService.loadData(status:statusValue, pets:pets)
+                    APIService.apiService.loadData(status:statusValue, pets:pets)
                 }
             }
         } label: {
