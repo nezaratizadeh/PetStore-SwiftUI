@@ -50,7 +50,7 @@ struct ContentView1: View {
                 .refreshable {
                     print("refresh table")
                     print(statusValue)
-                    APIService.loadData(status: statusValue, pets: pets)
+                    APIService.apiService.loadData(status: statusValue, pets: pets)
                 }
                 .listStyle(.inset)
                 .navigationTitle("Pets")
@@ -155,7 +155,7 @@ struct StatusDropDownView1: View {
                 Button(status) {
                     self.statusValue = status
                     
-                    APIService.loadData(status:statusValue, pets:pets)
+                    APIService.apiService.loadData(status:statusValue, pets:pets)
                 }
             }
         } label: {

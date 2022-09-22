@@ -9,7 +9,13 @@ import Foundation
 
 class APIService {
     
-    static func loadData(status: String,pets: Pets) {
+    static let apiService = APIService()
+    
+    private init() {
+        
+    }
+    
+     func loadData(status: String,pets: Pets) {
         let url = "https://petstore.swagger.io/v2/pet/"
         let configuration = URLSessionConfiguration.default
         
@@ -63,7 +69,7 @@ class APIService {
     }
 
     
-    static func editPetData(pet:Pet) {
+     func editPetData(pet:Pet) {
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration)
 
