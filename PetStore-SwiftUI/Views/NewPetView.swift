@@ -9,8 +9,8 @@ import SwiftUI
 
 struct NewPetView: View {
     @Binding var statusValue: String
-    @Binding var pet : Pet
-    @EnvironmentObject var pets: Pets
+    @State var pet : Pet = Pet()
+    @EnvironmentObject var pets: PetsViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -46,7 +46,7 @@ extension Binding {
 
 struct NewPetView_Previews: PreviewProvider {
     static var previews: some View {
-        NewPetView(statusValue: .constant(""), pet: .constant(Pet()))
-            .environmentObject(Pets())
+        NewPetView(statusValue: .constant(""))
+            .environmentObject(PetsViewModel())
     }
 }

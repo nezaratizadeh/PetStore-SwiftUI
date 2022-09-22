@@ -9,16 +9,16 @@
 import SwiftUI
 
 struct ContentView1: View {
-    @EnvironmentObject var pets: Pets
+    @EnvironmentObject var petsViewModel: PetsViewModel
     @State var ShowingAddPetpage : Bool = false
     @State var statusValue:String = ""
     @State var pet : Pet = Pet()
     @State private var searchText = ""
     var filteredPets : [Pet] {
         if searchText.isEmpty {
-            return pets.petCashes
+            return petsViewModel.petCashes
         }else {
-            return pets.petCashes.filter {a in
+            return petsViewModel.petCashes.filter {a in
                 if let name = a.name {
                     return name.lowercased().starts(with:searchText.lowercased())
                 }else {
@@ -38,7 +38,7 @@ struct ContentView1: View {
                     StatusDropDownView(statusValue: $statusValue)
 
                     ForEach(filteredPets) { pet in
-                        NavigationLink(destination: DetailView(pet: pet,pets: _pets, statusValue: $statusValue)) {
+                        NavigationLink(destination: DetailView(pet: pet,pets: _petsViewModel, statusValue: $statusValue)) {
                         Text(pet.name ?? "no name")
                         }
                     }
@@ -50,7 +50,7 @@ struct ContentView1: View {
                 .refreshable {
                     print("refresh table")
                     print(statusValue)
-                    APIService.apiService.loadData(status: statusValue, pets: pets)
+                    APIService.apiService.loadData(status: statusValue, pets: petsViewModel)
                 }
                 .listStyle(.inset)
                 .navigationTitle("Pets")
@@ -64,7 +64,7 @@ struct ContentView1: View {
                                         .sheet(isPresented: $ShowingAddPetpage, onDismiss: {
                     
                 }) {
-                    NewPetView(statusValue:$statusValue, pet: $pet)
+                    NewPetView(statusValue:$statusValue)
                 }
                                     , trailing:EditButton())
 //            }
@@ -79,12 +79,12 @@ struct ContentView1: View {
     
     
     func move(from source: IndexSet, to destination: Int) {
-        pets.petCashes.move(fromOffsets: source, toOffset: destination)
+        petsViewModel.petCashes.move(fromOffsets: source, toOffset: destination)
     }
     
     func delete(at offsets: IndexSet) {
         for i in offsets.makeIterator() {
-            let petId = pets.petCashes[i].id
+            let petId = petsViewModel.petCashes[i].id
             guard let url = URL(string: "https://petstore.swagger.io/v2/pet/\(petId)") else {
                 print("Error: cannot create URL")
                 return
@@ -130,7 +130,7 @@ struct ContentView1: View {
             
             
         }
-        pets.petCashes.remove(atOffsets: offsets)
+        petsViewModel.petCashes.remove(atOffsets: offsets)
         
     }
 }
@@ -139,7 +139,7 @@ struct ContentView1: View {
 struct ContentView_Previews1: PreviewProvider {
     static var previews: some View {
         ContentView1()
-            .environmentObject(Pets())
+            .environmentObject(PetsViewModel())
     }
 }
 
@@ -147,7 +147,7 @@ struct StatusDropDownView1: View {
     var statusDropDownList = ["sold", "available", "pending"]
     var placeholder = "Status"
     @Binding var statusValue : String
-    @EnvironmentObject var pets: Pets
+    @EnvironmentObject var pets: PetsViewModel
     
     var body: some View {
         Menu {

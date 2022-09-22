@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var pets: Pets
+    @EnvironmentObject var pets: PetsViewModel
     @State var ShowingAddPetpage : Bool = false
     @State var statusValue:String = "available"
-    @State var pet : Pet = Pet()
+//    @State var pet : Pet = Pet()
     private var statusList = ["available", "pending", "sold"]
     @State private var selectedIndex = 0
     @State private var searchText = ""
@@ -86,7 +86,7 @@ struct ContentView: View {
                                         .sheet(isPresented: $ShowingAddPetpage, onDismiss: {
                     
                 }) {
-                    NewPetView(statusValue:$statusValue, pet: $pet)
+                    NewPetView(statusValue:$statusValue)
                 }
                                     , trailing:EditButton())
                 //            }
@@ -161,7 +161,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(Pets())
+            .environmentObject(PetsViewModel())
     }
 }
 
@@ -169,7 +169,7 @@ struct StatusDropDownView: View {
     var statusDropDownList = ["sold", "available", "pending"]
     var placeholder = "Status"
     @Binding var statusValue : String
-    @EnvironmentObject var pets: Pets
+    @EnvironmentObject var pets: PetsViewModel
     
     var body: some View {
         Menu {
