@@ -102,7 +102,7 @@ final class APIService {
                     print("Error: Cannot convert JSON object to Pretty JSON data")
                     return
                 }
-                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                guard String(data: prettyJsonData, encoding: .utf8) != nil else {
                     print("Error: Could print JSON in String")
                     return
                 }
@@ -153,7 +153,7 @@ final class APIService {
                     print("Error: Cannot convert JSON object to Pretty JSON data")
                     return
                 }
-                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                guard String(data: prettyJsonData, encoding: .utf8) != nil else {
                     print("Error: Could print JSON in String")
                     return
                 }
@@ -165,5 +165,9 @@ final class APIService {
             }
         }.resume()
     }
+
+    
+    
+    
 }
 
